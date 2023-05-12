@@ -6,12 +6,11 @@ resources:
 
 variables:
   dockerRegistryServiceConnection: '569fbdc4-eae7-48e7-a717-a723d2ae03ce'
-  imageRepository: 'app1nginxaks'
+  imageRepository: 'app1/app1nginxaks'
   containerRegistry: 'aksdevopsacr.azurecr.io'
   dockerfilePath: '**/Dockerfile'
   tag: '$(Build.BuildId)'
   imagePullSecret: 'aksdevopsacr21364011-auth'
-  imageName: '$(imageRepository):(build.buildId)'
 - stage: Build
   displayName: Build stage
   jobs:  
@@ -26,8 +25,9 @@ variables:
         command: buildAndPush
         repository: $(imageRepository)
         dockerfile: $(dockerfilePath)
-        containerRegistry: $(dockerRegistryServiceConnection)
-        imageName:'weapp'
+        containerRegistry: $(containerRegistry)
+        serviceConnection: $(dockerRegistryServiceConnection)
+        
 - stage: Deploy
   displayName: Deploy stage
   dependsOn: Build
